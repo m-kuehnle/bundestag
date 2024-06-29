@@ -1,9 +1,15 @@
 import React from "react";
-import { fetchPerson, Person, Protocol, fetchProtocol, AllPersons, fetchAllPersons } from "../lib/api";
+import {
+  fetchPerson,
+  Person,
+  Protocol,
+  fetchProtocol,
+  AllPersons,
+  fetchAllPersons,
+} from "../lib/api";
 
 // Hauptkomponente der Anwendung
 export default async function Home() {
-  
   // Daten der Person, Protokolle und aller Personen abrufen
   const person: Person = await fetchPerson();
   const protocol: Protocol = await fetchProtocol();
@@ -15,7 +21,7 @@ export default async function Home() {
     return {
       name: parts[0],
       position: parts[1],
-      fraktion: parts[2]
+      fraktion: parts[2],
     };
   };
 
@@ -24,7 +30,9 @@ export default async function Home() {
 
   return (
     <div>
-      <h1 className='text-2xl font-bold mb-4'>Willkommen im Bundestag Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Willkommen im Bundestag Dashboard
+      </h1>
       <div>
         <h2>Personendetails:</h2>
         <p>
@@ -55,7 +63,7 @@ export default async function Home() {
           {new Date(person.basisdatum).toLocaleDateString("de-DE")}
         </p>
         <h3>Rollen:</h3>
-        <ul> 
+        <ul>
           {person.person_roles.map((role, index) => (
             <li key={index}>
               <p>
@@ -77,16 +85,16 @@ export default async function Home() {
         <p>Protokoll:</p>
         <p>{protocol.numFound}</p>
         <p>Titel: {protocol.documents[0].titel}</p>
-        <p>Text: {protocol.documents[0].text}</p>
+        <p>Text: {protocol.documents[0].text}</p> 
 
-        <h3 className="font-bold">Alle Personen:</h3>
+        <h2 className="font-bold">Alle Personen:</h2>
         <p>Name: {personDetails.name}</p>
         <p>Wahlperiode: {allPersons.documents[0].wahlperiode}</p>
         <p>Aktualisiert am: {allPersons.documents[0].aktualisiert}</p>
         <p>Datum: {allPersons.documents[0].datum}</p>
         <p>Basisdatum: {allPersons.documents[0].basisdatum}</p>
         <p>Position: {personDetails.position}</p>
-        <p>Fraktion: {personDetails.fraktion}</p>
+        <p> Fraktion: {personDetails.fraktion}</p>
       </div>
     </div>
   );

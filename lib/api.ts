@@ -102,6 +102,11 @@ export async function fetchProtocol(): Promise<Protocol> {
 
 
 
+export interface Person {
+  id: string;
+  name: string;
+}
+
 export interface AllPersons {
   numFound: number;
   documents: Person[];
@@ -109,18 +114,26 @@ export interface AllPersons {
 
 export async function fetchAllPersons(): Promise<AllPersons> {
   console.log("fetchAllPersons...");
-  const res = await fetch(
-    "https://search.dip.bundestag.de/api/v1/person?f.wahlperiode=20&format=json&apikey=I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21",
-    {
-      headers: {
-        accept: "application/json",
-      },
-    }
-  );
+  const url = "https://search.dip.bundestag.de/api/v1/person?f.wahlperiode=20&format=json&apikey=I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21";
+
+  const res = await fetch(url, {
+    headers: {
+      accept: "application/json",
+    },
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  // Ensure data.numFound and data.documents are correctly mapped to AllPersons interface
+  const allPersonsResponse: AllPersons = {
+    numFound: data.numFound,
+    documents: data.documents,
+  };
+
+  return allPersonsResponse;
 }
+

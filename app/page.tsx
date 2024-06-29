@@ -93,13 +93,30 @@ export default async function Home() {
         <DashboardCard numFound={93} title={"Irgendwas"} />
 
         <h3 className="font-bold">Alle Personen:</h3>
-        <p>Name: {personDetails.name}</p>
-        <p>Wahlperiode: {allPersons.documents[0].wahlperiode}</p>
-        <p>Aktualisiert am: {allPersons.documents[0].aktualisiert}</p>
-        <p>Datum: {allPersons.documents[0].datum}</p>
-        <p>Basisdatum: {allPersons.documents[0].basisdatum}</p>
-        <p>Position: {personDetails.position}</p>
-        <p>Fraktion: {personDetails.fraktion}</p>
+        <div>
+          {allPersons.documents.map((person, index) => (
+            <div key={index} className="border p-4 mb-4">
+              <p>
+                Name: {person.vorname} {person.nachname}
+              </p>
+              <p>ID: {person.id}</p>
+              <p>Titel: {person.titel}</p>
+              <p>Typ: {person.typ}</p>
+              <p>Wahlperiode: {person.wahlperiode}</p>
+              <p>
+                Aktualisiert am:{" "}
+                {new Date(person.aktualisiert).toLocaleDateString("de-DE")}
+              </p>
+              <p>Datum: {new Date(person.datum).toLocaleDateString("de-DE")}</p>
+              <p>
+                Basisdatum:{" "}
+                {new Date(person.basisdatum).toLocaleDateString("de-DE")}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <p></p>
       </div>
     </div>
   );

@@ -1,9 +1,16 @@
 import React from "react";
-import { fetchPerson, Person, Protocol, fetchProtocol, AllPersons, fetchAllPersons } from "../lib/api";
+import DashboardCard from "@/components/dashboard/DashboardCard";
+import {
+  fetchPerson,
+  Person,
+  Protocol,
+  fetchProtocol,
+  AllPersons,
+  fetchAllPersons,
+} from "../lib/api";
 
 // Hauptkomponente der Anwendung
 export default async function Home() {
-  
   // Daten der Person, Protokolle und aller Personen abrufen
   const person: Person = await fetchPerson();
   const protocol: Protocol = await fetchProtocol();
@@ -15,7 +22,7 @@ export default async function Home() {
     return {
       name: parts[0],
       position: parts[1],
-      fraktion: parts[2]
+      fraktion: parts[2],
     };
   };
 
@@ -24,7 +31,9 @@ export default async function Home() {
 
   return (
     <div>
-      <h1 className='text-2xl font-bold mb-4'>Willkommen im Bundestag Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Willkommen im Bundestag Dashboard
+      </h1>
       <div>
         <h2>Personendetails:</h2>
         <p>
@@ -55,7 +64,7 @@ export default async function Home() {
           {new Date(person.basisdatum).toLocaleDateString("de-DE")}
         </p>
         <h3>Rollen:</h3>
-        <ul> 
+        <ul>
           {person.person_roles.map((role, index) => (
             <li key={index}>
               <p>
@@ -78,6 +87,10 @@ export default async function Home() {
         <p>{protocol.numFound}</p>
         <p>Titel: {protocol.documents[0].titel}</p>
         <p>Text: {protocol.documents[0].text}</p>
+
+        <DashboardCard numFound={755} title={"Personen"} />
+        <DashboardCard numFound={9} title={"Fraktionen"} />
+        <DashboardCard numFound={93} title={"Irgendwas"} />
 
         <h3 className="font-bold">Alle Personen:</h3>
         <p>Name: {personDetails.name}</p>

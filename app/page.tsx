@@ -1,9 +1,22 @@
 import React from "react";
-import { fetchPerson, Person, Protocol, fetchProtocol } from "../lib/api";
+import { fetchPerson, Person, Protocol, fetchProtocol, AllPersons, fetchAllPersons } from "../lib/api";
 
 export default async function Home() {
   const person: Person = await fetchPerson();
   const protocol: Protocol = await fetchProtocol();
+  const allPersons: AllPersons = await fetchAllPersons();
+
+  // Funktion zum Aufteilen des Titels
+  const parseTitle = (title: string) => {
+    const parts = title.split(", ");
+    return {
+      name: parts[0],
+      position: parts[1],
+      fraktion: parts[2]
+    };
+  };
+
+  const personDetails = parseTitle(allPersons.documents[0].titel);
 
   return (
     <div>
@@ -57,10 +70,19 @@ export default async function Home() {
             </li>
           ))}
         </ul>
-        <p>Protokol:</p>
+        <p>Protokoll:</p>
         <p>{protocol.numFound}</p>
         <p>Titel: {protocol.documents[0].titel}</p>
         <p>Text: {protocol.documents[0].text}</p>
+
+        <h3 className="font-bold">Alle Personen:</h3>
+        <p>Name: {personDetails.name}</p>
+        <p>Wahlperiode: {allPersons.documents[0].wahlperiode}</p>
+        <p>Aktualisiert am: {allPersons.documents[0].aktualisiert}</p>
+        <p>Datum: {allPersons.documents[0].datum}</p>
+        <p>Basisdatum: {allPersons.documents[0].basisdatum}</p>
+        <p>Position: {personDetails.position}</p>
+        <p>Fraktion: {personDetails.fraktion}</p>
       </div>
     </div>
   );

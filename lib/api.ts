@@ -99,3 +99,28 @@ export async function fetchProtocol(): Promise<Protocol> {
 
   return res.json();
 }
+
+
+
+export interface AllPersons {
+  numFound: number;
+  documents: Person[];
+}
+
+export async function fetchAllPersons(): Promise<AllPersons> {
+  console.log("fetchAllPersons...");
+  const res = await fetch(
+    "https://search.dip.bundestag.de/api/v1/person?f.wahlperiode=20&format=json&apikey=I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21",
+    {
+      headers: {
+        accept: "application/json",
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+}

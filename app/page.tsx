@@ -1,12 +1,15 @@
 import React from "react";
 import { fetchPerson, Person, Protocol, fetchProtocol, AllPersons, fetchAllPersons } from "../lib/api";
 
+// Hauptkomponente der Anwendung
 export default async function Home() {
+  
+  // Daten der Person, Protokolle und aller Personen abrufen
   const person: Person = await fetchPerson();
   const protocol: Protocol = await fetchProtocol();
   const allPersons: AllPersons = await fetchAllPersons();
 
-  // Funktion zum Aufteilen des Titels
+  // Funktion zum Aufteilen des Titels in Name, Position und Fraktion
   const parseTitle = (title: string) => {
     const parts = title.split(", ");
     return {
@@ -16,6 +19,7 @@ export default async function Home() {
     };
   };
 
+  // Erster Eintrag in der Liste aller Personen analysieren
   const personDetails = parseTitle(allPersons.documents[0].titel);
 
   return (

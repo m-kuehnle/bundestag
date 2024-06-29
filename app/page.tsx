@@ -31,6 +31,13 @@ export default async function Home() {
 
   return (
     <div>
+      <div className="flex justify-center mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-screen-lg px-4">
+          <DashboardCard numFound={709} title={"Personen"} />
+          <DashboardCard numFound={9} title={"Fraktionen"} />
+          <DashboardCard numFound={20} title={"Wahlperiode"} />
+        </div>
+      </div>
       <h1 className="text-2xl font-bold mb-4">
         Willkommen im Bundestag Dashboard
       </h1>
@@ -87,10 +94,6 @@ export default async function Home() {
         <p>{protocol.numFound}</p>
         <p>Titel: {protocol.documents[0].titel}</p>
         <p>Text: {protocol.documents[0].text}</p>
-
-        <DashboardCard numFound={755} title={"Personen"} />
-        <DashboardCard numFound={9} title={"Fraktionen"} />
-        <DashboardCard numFound={93} title={"Irgendwas"} />
 
         <h3 className="font-bold">Alle Personen:</h3>
         <div>

@@ -46,8 +46,8 @@ const Bundestagsmitglieder = ({ persons }: { persons: Person[] }) => {
       <div className="flex w-full max-w-sm items-center space-x-2">
         <Input
           type="text"
-          placeholder="Filter nach Name"
-          className="mr-2 max-w-fit dark:text-white"
+          placeholder="Filter nach Nachname"
+          className="m-2 max-w-fit"
           value={filterName}
           onChange={(e) => {
             setFilterName(e.target.value);
@@ -57,7 +57,7 @@ const Bundestagsmitglieder = ({ persons }: { persons: Person[] }) => {
       </div>
 
       <Table>
-        <TableCaption>Bundestagsmitglieder</TableCaption>
+        <TableCaption>Mitglieder im Bundestag</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]"></TableHead>

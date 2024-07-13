@@ -6,7 +6,7 @@ import PiechartFraktion from "@/components/dashboard/PiechartFraktionen";
 
 export default async function Home() {
   const allPersons: AllPersons = await fetchAllPersons();
-  const numPersons = allPersons.documents.length;
+  const numPersons = allPersons.persons.length;
 
   return (
     <div className="p-4">
@@ -20,8 +20,8 @@ export default async function Home() {
           <DashboardCard numFound={20} title={"Wahlperiode"} />
         </div>
       </div>
-      <PiechartFraktion persons={allPersons.documents} />
-      <Bundestagsmitglieder persons={allPersons.documents} />
+      <PiechartFraktion persons={allPersons.persons}></PiechartFraktion>
+      <Bundestagsmitglieder persons={allPersons.persons} />
     </div>
   );
 }

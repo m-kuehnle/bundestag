@@ -20,7 +20,7 @@ export default async function Home() {
           <DashboardCard numFound={20} title={"Wahlperiode"} />
         </div>
       </div>
-      <PiechartFraktion></PiechartFraktion>
+      <PiechartFraktion persons={allPersons.persons}></PiechartFraktion>
       <Bundestagsmitglieder persons={allPersons.persons} />
     </div>
   );

@@ -1,7 +1,8 @@
-"use client"
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+"use client";
+
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -9,54 +10,81 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card"
+} from "../ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "../ui/chart"
-const chartData = [
-  { browser: "BSW", visitors: 3, fill: "var(--color-chrome)" },
-  { browser: "AFD", visitors: 5, fill: "var(--color-safari)" },
-  { browser: "SPD", visitors: 20, fill: "var(--color-firefox)" },
-  { browser: "FDP", visitors: 32, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 12, fill: "var(--color-other)" },
-]
+} from "../ui/chart";
+
+interface Person {
+  id: string;
+  nachname: string;
+  vorname: string;
+  typ: string;
+  wahlperiode: number;
+  aktualisiert: string;
+  titel: string;
+  datum: string;
+  basisdatum: string;
+}
+
+interface PiechartFraktionenProps {
+  persons: Person[];
+}
+
+const getFraktionData = (persons: Person[]) => {
+  const fraktionCount: { [key: string]: number } = {};
+
+  persons.forEach((person) => {
+    const fraktion = person.titel.split(", ")[2];
+    if (fraktion in fraktionCount) {
+      fraktionCount[fraktion]++;
+    } else {
+      fraktionCount[fraktion] = 1;
+    }
+  });
+
+  return Object.keys(fraktionCount).map((fraktion, index) => ({
+    browser: fraktion,
+    visitors: fraktionCount[fraktion],
+    fill: `var(--chart-${index + 1})`, // Dynamische Farbe basierend auf Index
+  }));
+};
+
 const chartConfig = {
   visitors: {
-    label: "FDP",
+    label: "Abgeordnete",
   },
-  chrome: {
-    label: "AFD",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "SPD",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "FDP",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "GRÜNEN",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
-export function PiechartFraktionen() {
+} satisfies ChartConfig;
+
+export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
+  const chartData = React.useMemo(() => getFraktionData(persons), [persons]);
+
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+  }, [chartData]);
+
+  const maxVisitorsParty = React.useMemo(() => {
+    let maxParty = "";
+    let maxCount = 0;
+
+    chartData.forEach((item) => {
+      if (item.visitors > maxCount) {
+        maxParty = item.browser;
+        maxCount = item.visitors;
+      }
+    });
+
+    return { party: maxParty, count: maxCount };
+  }, [chartData]);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Abgeordnete einer Fraktion </CardTitle>
-        <CardDescription> Juli 2024</CardDescription>
+        <CardTitle>Abgeordnete einer Fraktion</CardTitle>
+        <CardDescription>Juli 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -97,10 +125,10 @@ export function PiechartFraktionen() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                         Abgeordnete
+                          Abgeordnete
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -110,18 +138,14 @@ export function PiechartFraktionen() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-         <span className="text-green-500">GRÜNEN</span> - Mehrheit mit {totalVisitors}  <TrendingUp className="h-4 w-4" />
+          <span className="text-red-500">{maxVisitorsParty.party}</span> - Mehrheit mit {maxVisitorsParty.count} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Zeigt Abgeordnete einzelner Fraktionen
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 export default PiechartFraktionen;
-
-
-
-

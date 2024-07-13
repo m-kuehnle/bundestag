@@ -23,6 +23,7 @@ async function fetchPersons(cursor?: string): Promise<AllPersons> {
   let url = `https://search.dip.bundestag.de/api/v1/person?f.wahlperiode=20`;
   if (cursor) {
     url += `&cursor=${cursor}`;
+    console.log("aktueller cursor: ", cursor)
   }
   url += `&format=json&apikey=I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21`;
 

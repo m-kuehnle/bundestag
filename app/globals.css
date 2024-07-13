@@ -77,19 +77,29 @@
 
   @layer base {
     :root {
-      --chart-1: 12 76% 61%;
-      --chart-2: 173 58% 39%;
-      --chart-3: 197 37% 24%;
-      --chart-4: 43 74% 66%;
-      --chart-5: 27 87% 67%;
+      --chart-1: #f44336; /* Rot für SPD */
+      --chart-2: #2196f3; /* Blau für AFD */
+      --chart-3: #4caf50; /* Grün für CDU */
+      --chart-4: #ffeb3b; /* Gelb für FDP */
+      --chart-5: #9c27b0; /* Lila für GRÜNE */
+      --chart-6: #ff9800; /* Orange für CSU */
+      --chart-7: #795548; /* Braun für LINKE */
+      --chart-8: #607d8b; /* Grau für Other */
+      --chart-9: #000000; /* Schwarz */
+      --chart-10: #08743b; /* Schwarz */
+      --chart-11: #1982d7; /* Schwarz */
+      --chart-12: #7d1f8d; /* Schwarz */
     }
   
     .dark {
-      --chart-1: 220 70% 50%;
-      --chart-2: 160 60% 45%;
-      --chart-3: 30 80% 55%;
-      --chart-4: 280 65% 60%;
-      --chart-5: 340 75% 55%;
+      --chart-1: #b71c1c;
+      --chart-2: #0d47a1;
+      --chart-3: #2e7d32;
+      --chart-4: #f9a825;
+      --chart-5: #6a1b9a;
+      --chart-6: #e65100;
+      --chart-7: #3e2723;
+      --chart-8: #455a64;
     }
   }
   

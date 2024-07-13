@@ -1,3 +1,4 @@
+
 export interface Person {
   id: string;
   nachname: string;
@@ -70,9 +71,16 @@ async function fetchAllPersons(): Promise<AllPersons> {
 
   do {
     const response = await fetchPersons(cursor);
+
+    // Replace initial cursor with specific cursor if encountered
+    if (response.cursor === 'AoJw0OfIrJADK1BlcnNvbi0yMTAx' && !cursor) {
+      cursor = 'AoJw0MOVwZADK1BlcnNvbi03MjU2';
+    } else {
+      cursor = response.cursor;
+    }
+
     totalNumFound = response.numFound;
     allPersons.push(...response.persons);
-    cursor = response.cursor;
 
     if (cursor && seenCursors.has(cursor)) {
       cursor = undefined; // End pagination if cursor is repeated
@@ -95,3 +103,4 @@ function delay(ms: number): Promise<void> {
 }
 
 export { fetchPersons, fetchAllPersons };
+

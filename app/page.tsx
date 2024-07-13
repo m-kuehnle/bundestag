@@ -2,11 +2,11 @@ import React from "react";
 import DashboardCard from "@/components/dashboard/DashboardCard";
 import { AllPersons, fetchAllPersons } from "../lib/api";
 import Bundestagsmitglieder from "@/components/dashboard/Bundestagsmitglieder";
-import PiechartFraktion from "@/components/dashboard/piechartFraktionen";
+import PiechartFraktion from "@/components/dashboard/PiechartFraktionen";
 
 export default async function Home() {
   const allPersons: AllPersons = await fetchAllPersons();
-  const numPersons = allPersons.documents.length;
+  const numPersons = allPersons.persons.length;
 
   return (
     <div className="p-4">
@@ -19,11 +19,9 @@ export default async function Home() {
           <DashboardCard numFound={7} title={"Fraktionen"} />
           <DashboardCard numFound={20} title={"Wahlperiode"} />
         </div>
-        
       </div>
       <PiechartFraktion></PiechartFraktion>
-      <Bundestagsmitglieder persons={allPersons.documents} />
-      
+      <Bundestagsmitglieder persons={allPersons.persons} />
     </div>
   );
 }

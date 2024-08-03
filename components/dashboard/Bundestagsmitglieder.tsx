@@ -32,7 +32,8 @@ const Bundestagsmitglieder = ({ persons }: { persons: Person[] }) => {
 
   // Funktion zum Aufteilen des Titels in Name, Position und Fraktion
   const parseTitle = (title: string) => {
-    const parts = title.split(", ");
+    // Kommata in Klammern ignorieren
+    const parts = title.split(/, (?![^(]*\))/);
     return {
       name: parts[0],
       position: parts[1],
@@ -63,7 +64,7 @@ const Bundestagsmitglieder = ({ persons }: { persons: Person[] }) => {
             <TableHead className="w-[100px]"></TableHead>
             <TableHead className="w-[300px]">Name</TableHead>
             <TableHead>Position</TableHead>
-            <TableHead>Fraktion</TableHead>
+            <TableHead>Zugehörigkeit</TableHead>
             <TableHead className="text-right">Wahlperiode</TableHead>
           </TableRow>
         </TableHeader>

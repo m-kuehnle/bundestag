@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart } from "recharts";
+import { Pie, PieChart, Cell, Label } from "recharts";
+import Afd from "../../app/images/fraktionen/afd.png";
+import Cdu from "../../app/images/fraktionen/cdu.png";
+import Fdp from "../../app/images/fraktionen/fdp.png";
+import Grüne from "../../app/images/fraktionen/grünen.png";
+import Spd from "../../app/images/fraktionen/spd.png";
+import Linke from "../../app/images/fraktionen/linke.png";
+import BSW from "../../app/images/fraktionen/bsw.png";
 import {
   Card,
   CardContent,
@@ -42,9 +49,13 @@ const getFraktionData = (persons: Person[]) => {
       const parts = person.titel.split(", ");
       if (parts.length > 2) {
         let fraktion = parts[2];
-        if (fraktion === fraktion.toUpperCase() || fraktion.length < 4 || fraktion === "fraktionslos") {
-          if (fraktion === "BÜNDNIS 90/DIE GRÜNEN" ) {
-            fraktion = " GRÜNEN"; 
+        if (
+          fraktion === fraktion.toUpperCase() ||
+          fraktion.length < 4 ||
+          fraktion === "fraktionslos"
+        ) {
+          if (fraktion === "BÜNDNIS 90/DIE GRÜNEN") {
+            fraktion = " GRÜNEN";
           }
           if (fraktion in fraktionCount) {
             fraktionCount[fraktion]++;
@@ -57,12 +68,22 @@ const getFraktionData = (persons: Person[]) => {
   });
 
   return Object.keys(fraktionCount).map((fraktion, index) => ({
-    browser: fraktion,
-    visitors: fraktionCount[fraktion],
+    fraktion,
+    count: fraktionCount[fraktion],
     fill: `var(--chart-${index + 1})`, // Dynamische Farbe basierend auf Index
   }));
 };
 
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF12042",
+  "#AF19FF",
+  "#FF4D4D",
+  "#FF69B4",
+  "#A52A2A",
+];
 
 const chartConfig = {
   visitors: {
@@ -74,7 +95,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
   const chartData = React.useMemo(() => getFraktionData(persons), [persons]);
 
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+    return chartData.reduce((acc, curr) => acc + curr.count, 0);
   }, [chartData]);
 
   const maxVisitorsParty = React.useMemo(() => {
@@ -82,9 +103,9 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
     let maxCount = 0;
 
     chartData.forEach((item) => {
-      if (item.visitors > maxCount) {
-        maxParty = item.browser;
-        maxCount = item.visitors;
+      if (item.count > maxCount) {
+        maxParty = item.fraktion;
+        maxCount = item.count;
       }
     });
 
@@ -94,7 +115,9 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Zeigt Abgeordnete einzelner Fraktionen in der Wahlperiode "20"</CardTitle>
+        <CardTitle>
+          Zeigt Abgeordnete einzelner Fraktionen in der Wahlperiode "20"
+        </CardTitle>
         <CardDescription>Juli 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -109,11 +132,21 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="count"
+              nameKey="fraktion"
               innerRadius={60}
+              outerRadius={100}
+              startAngle={180}
+              endAngle={0}
               strokeWidth={6}
+              paddingAngle={0}
             >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -123,7 +156,6 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
                         y={viewBox.cy}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        
                       >
                         <tspan
                           x={viewBox.cx}
@@ -148,12 +180,74 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+      <CardFooter className="flex-col gap-2 text-sm ">
         <div className="flex items-center gap-2 font-medium leading-none">
-          <span className="text-red-500">{maxVisitorsParty.party}</span> - Mehrheit mit {maxVisitorsParty.count} <TrendingUp className="h-4 w-4" />
+          <span className="text-red-500">{maxVisitorsParty.party}</span> -
+          Mehrheit mit {maxVisitorsParty.count}{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
+        <div className="leading-none text-muted-foreground ">
           Zeigt Abgeordnete einzelner Fraktionen
+        </div>
+        <div className="flex justify-center mt-4">
+          <div className="grid grid-cols-8 gap-4 align-content space-between">
+            <div className="flex flex-col items-center">
+              <img src={Afd.src} width="120" height="120" alt="AfD" />
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#00A3E0] mr-2"></div>
+                <span className="text-lg font-semibold">30</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center ">
+              <img src={Cdu.src} width="120" height="120" alt="CDU" />
+              <div className="flex items-center mt-2 ">
+                <div className="w-6 h-6 rounded-full bg-[#000000] mr-2"></div>
+                <span className="text-lg font-semibold">25</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src={Fdp.src} width="120" height="120" alt="FDP" />
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#FFCC00] mr-2"></div>
+                <span className="text-lg font-semibold">12</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src={Grüne.src} width="120" height="120" alt="Grüne" />
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#3F9C35] mr-2"></div>
+                <span className="text-lg font-semibold">20</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center align-content space-between ">
+              <img src={Linke.src} width="120" height="120" alt="Linke" />
+              <div className="flex items-center mt-[30px]">
+                <div className="w-6 h-6 rounded-full bg-[#C8102E] mr-2 mb-[-20px]"></div>
+                <span className="text-lg font-semibold ">15</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src={Spd.src} width="120" height="120" alt="SPD" />
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#E3000F] mr-2"></div>
+                <span className="text-lg font-semibold">35</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src={BSW.src} width="120" height="120" alt="BSW" />
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#B4B4B4] mr-2 mb-[-30px]"></div>
+                <span className="text-lg font-semibold mb-[-18px]">8</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center ">
+              <p className="font-bold">Sonstige</p>
+              <div className="flex items-center mt-2">
+                <div className="w-6 h-6 rounded-full bg-[#D1D1D1] mr-2"></div>
+                <span className="text-lg font-semibold">5</span>
+              </div>
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>

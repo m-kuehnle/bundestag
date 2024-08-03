@@ -116,9 +116,9 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>
-          Zeigt Abgeordnete einzelner Fraktionen in der Wahlperiode "20"
+          Sitzverteilung des Deutschen Bundestages
         </CardTitle>
-        <CardDescription>Juli 2024</CardDescription>
+        <CardDescription>Wahlperiode 20</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -189,63 +189,68 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
         <div className="leading-none text-muted-foreground ">
           Zeigt Abgeordnete einzelner Fraktionen
         </div>
-        <div className="flex justify-center mt-4">
-          <div className="grid grid-cols-8 gap-4 align-content space-between">
-            <div className="flex flex-col items-center">
+        <div className="mt-4">
+          {/* Logos der Parteien */}
+          <div className="grid grid-cols-8 grid-rows-1 gap-4 content-stretch">
+            <div className="self-center">
               <img src={Afd.src} width="120" height="120" alt="AfD" />
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#00A3E0] mr-2"></div>
-                <span className="text-lg font-semibold">30</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center ">
+            <div className="self-center">
               <img src={Cdu.src} width="120" height="120" alt="CDU" />
-              <div className="flex items-center mt-2 ">
-                <div className="w-6 h-6 rounded-full bg-[#000000] mr-2"></div>
-                <span className="text-lg font-semibold">25</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="self-center">
               <img src={Fdp.src} width="120" height="120" alt="FDP" />
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#FFCC00] mr-2"></div>
-                <span className="text-lg font-semibold">12</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="self-center">
               <img src={Grüne.src} width="120" height="120" alt="Grüne" />
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#3F9C35] mr-2"></div>
-                <span className="text-lg font-semibold">20</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center align-content space-between ">
+            <div className="self-center ">
               <img src={Linke.src} width="120" height="120" alt="Linke" />
-              <div className="flex items-center mt-[30px]">
-                <div className="w-6 h-6 rounded-full bg-[#C8102E] mr-2 mb-[-20px]"></div>
-                <span className="text-lg font-semibold ">15</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="self-center">
               <img src={Spd.src} width="120" height="120" alt="SPD" />
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#E3000F] mr-2"></div>
-                <span className="text-lg font-semibold">35</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="self-center ">
               <img src={BSW.src} width="120" height="120" alt="BSW" />
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#B4B4B4] mr-2 mb-[-30px]"></div>
-                <span className="text-lg font-semibold mb-[-18px]">8</span>
-              </div>
             </div>
-            <div className="flex flex-col items-center ">
-              <p className="font-bold">Sonstige</p>
-              <div className="flex items-center mt-2">
-                <div className="w-6 h-6 rounded-full bg-[#D1D1D1] mr-2"></div>
-                <span className="text-lg font-semibold">5</span>
-              </div>
+            <div className="self-center">
+              <p className="font-bold text-2xl">Sonstige</p>
+            </div>
+          </div>
+
+          {/* Farbe und Anzahl */}
+          <div className="grid grid-cols-8 grid-rows-1 gap-4">
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#00A3E0] mr-2"></div>
+              <span className="text-lg font-semibold">30</span>
+            </div>
+            <div className="flex justify-center mt-2 ">
+              <div className="w-6 h-6 rounded-full bg-[#000000] mr-2"></div>
+              <span className="text-lg font-semibold">25</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#FFCC00] mr-2"></div>
+              <span className="text-lg font-semibold">12</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#3F9C35] mr-2"></div>
+              <span className="text-lg font-semibold">20</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#C8102E] mr-2"></div>
+              <span className="text-lg font-semibold ">15</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#E3000F] mr-2"></div>
+              <span className="text-lg font-semibold">35</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#B4B4B4] mr-2"></div>
+              <span className="text-lg font-semibold">8</span>
+            </div>
+            <div className="flex justify-center mt-2">
+              <div className="w-6 h-6 rounded-full bg-[#D1D1D1] mr-2"></div>
+              <span className="text-lg font-semibold">5</span>
             </div>
           </div>
         </div>

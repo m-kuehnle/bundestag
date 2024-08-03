@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 export type Person = {
   id: number;
@@ -29,7 +28,7 @@ export const columns: ColumnDef<Person>[] = [
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {

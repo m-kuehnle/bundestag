@@ -10,6 +10,7 @@ import Grüne from "../../app/images/fraktionen/grünen.png";
 import Spd from "../../app/images/fraktionen/spd.png";
 import Linke from "../../app/images/fraktionen/linke.png";
 import BSW from "../../app/images/fraktionen/bsw.png";
+import { Person } from "../../lib/api";
 import {
   Card,
   CardContent,
@@ -25,18 +26,6 @@ import {
   ChartTooltipContent,
 } from "../ui/chart";
 
-interface Person {
-  id: string;
-  nachname: string;
-  vorname: string;
-  typ: string;
-  wahlperiode: number;
-  aktualisiert: string;
-  titel: string;
-  datum: string;
-  basisdatum: string;
-}
-
 interface PiechartFraktionenProps {
   persons: Person[];
 }
@@ -45,8 +34,8 @@ const getFraktionData = (persons: Person[]) => {
   const fraktionCount: { [key: string]: number } = {};
 
   persons.forEach((person) => {
-    if (person.wahlperiode === 20 && person.titel.includes("MdB")) {
-      const parts = person.titel.split(", ");
+    if (person.wahlperiode === 20 && person.position == ("MdB")) {
+      const parts = person.position.split(", ");
       if (parts.length > 2) {
         let fraktion = parts[2];
         if (
@@ -115,9 +104,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>
-          Sitzverteilung des Deutschen Bundestages
-        </CardTitle>
+        <CardTitle>Sitzverteilung des Deutschen Bundestages</CardTitle>
         <CardDescription>Wahlperiode 20</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">

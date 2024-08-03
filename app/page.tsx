@@ -3,6 +3,7 @@ import DashboardCard from "@/components/dashboard/DashboardCard";
 import { AllPersons, fetchAllPersons } from "../lib/api";
 import Bundestagsmitglieder from "@/components/dashboard/Bundestagsmitglieder";
 import PiechartFraktion from "@/components/dashboard/PiechartFraktionen";
+import DemoPage from "./bundestagsmitglieder/page";
 
 export default async function Home() {
   const allPersons: AllPersons = await fetchAllPersons();
@@ -21,6 +22,7 @@ export default async function Home() {
         </div>
       </div>
       <PiechartFraktion persons={allPersons.persons}></PiechartFraktion>
+      <DemoPage />
       <Bundestagsmitglieder persons={allPersons.persons} />
     </div>
   );

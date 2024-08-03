@@ -59,7 +59,7 @@ const getFraktionData = (persons: Person[]) => {
   return Object.keys(fraktionCount).map((fraktion, index) => ({
     browser: fraktion,
     visitors: fraktionCount[fraktion],
-    fill: `var(--chart-${index + 1})`, // Dynamische Farbe basierend auf Index
+    fill: `var(--chart-${index })`, // Dynamische Farbe basierend auf Index
   }));
 };
 

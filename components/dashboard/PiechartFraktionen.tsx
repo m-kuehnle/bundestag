@@ -38,11 +38,21 @@ const getFraktionData = (persons: Person[]) => {
   const fraktionCount: { [key: string]: number } = {};
 
   persons.forEach((person) => {
-    const fraktion = person.titel.split(", ")[2];
-    if (fraktion in fraktionCount) {
-      fraktionCount[fraktion]++;
-    } else {
-      fraktionCount[fraktion] = 1;
+    if (person.wahlperiode === 20 && person.titel.includes("MdB")) {
+      const parts = person.titel.split(", ");
+      if (parts.length > 2) {
+        let fraktion = parts[2];
+        if (fraktion === fraktion.toUpperCase() || fraktion.length < 4 || fraktion === "fraktionslos") {
+          if (fraktion === "BÜNDNIS 90/DIE GRÜNEN" ) {
+            fraktion = " GRÜNEN"; 
+          }
+          if (fraktion in fraktionCount) {
+            fraktionCount[fraktion]++;
+          } else {
+            fraktionCount[fraktion] = 1;
+          }
+        }
+      }
     }
   });
 
@@ -53,11 +63,12 @@ const getFraktionData = (persons: Person[]) => {
   }));
 };
 
+
 const chartConfig = {
   visitors: {
     label: "Abgeordnete",
   },
-} satisfies ChartConfig;
+} as ChartConfig;
 
 export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
   const chartData = React.useMemo(() => getFraktionData(persons), [persons]);
@@ -83,7 +94,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Abgeordnete einer Fraktion</CardTitle>
+        <CardTitle>Zeigt Abgeordnete einzelner Fraktionen in der Wahlperiode "20"</CardTitle>
         <CardDescription>Juli 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -93,7 +104,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
         >
           <PieChart>
             <ChartTooltip
-              cursor={false}
+              cursor={true}
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
@@ -101,7 +112,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
               dataKey="visitors"
               nameKey="browser"
               innerRadius={60}
-              strokeWidth={5}
+              strokeWidth={6}
             >
               <Label
                 content={({ viewBox }) => {
@@ -112,6 +123,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
                         y={viewBox.cy}
                         textAnchor="middle"
                         dominantBaseline="middle"
+                        
                       >
                         <tspan
                           x={viewBox.cx}

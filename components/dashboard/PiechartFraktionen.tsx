@@ -34,45 +34,29 @@ const getFraktionData = (persons: Person[]) => {
   const fraktionCount: { [key: string]: number } = {};
 
   persons.forEach((person) => {
-    if (person.wahlperiode === 20 && person.position == ("MdB")) {
-      const parts = person.position.split(", ");
-      if (parts.length > 2) {
-        let fraktion = parts[2];
-        if (
-          fraktion === fraktion.toUpperCase() ||
-          fraktion.length < 4 ||
-          fraktion === "fraktionslos"
-        ) {
-          if (fraktion === "BÜNDNIS 90/DIE GRÜNEN") {
-            fraktion = " GRÜNEN";
-          }
-          if (fraktion in fraktionCount) {
-            fraktionCount[fraktion]++;
-          } else {
-            fraktionCount[fraktion] = 1;
-          }
-        }
-      }
+    if (person.wahlperiode === 20 && person.position == "MdB") {
+      fraktionCount[person.association] =
+        (fraktionCount[person.association] || 0) + 1;
     }
   });
 
   return Object.keys(fraktionCount).map((fraktion, index) => ({
     fraktion,
     count: fraktionCount[fraktion],
-    fill: `var(--chart-${index + 1})`, // Dynamische Farbe basierend auf Index
+    fill: `var(--chart-${index + 1})`,
   }));
 };
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF12042",
-  "#AF19FF",
-  "#FF4D4D",
-  "#FF69B4",
-  "#A52A2A",
-];
+const COLORS: { [key: string]: string } = {
+  "AfD": "#00A3E0",
+  "CDU/CSU": "#000000",
+  "FDP": "#FFCC00",
+  "BÜNDNIS 90/DIE GRÜNEN": "#3F9C35",
+  "DIE LINKE": "#C8102E",
+  "SPD": "#E3000F",
+  "BSW": "#691A40",
+  "fraktionslos": "#D1D1D1",
+};
 
 const chartConfig = {
   visitors: {
@@ -110,7 +94,7 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square w-full max-w-[400px]"
         >
           <PieChart>
             <ChartTooltip
@@ -121,18 +105,15 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
               data={chartData}
               dataKey="count"
               nameKey="fraktion"
-              innerRadius={60}
-              outerRadius={100}
+              innerRadius={100}
+              outerRadius={180}
               startAngle={180}
               endAngle={0}
               strokeWidth={6}
-              paddingAngle={0}
+              paddingAngle={1}
             >
               {chartData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
+                <Cell key={`cell-${index}`} fill={COLORS[entry.fraktion]} />
               ))}
               <Label
                 content={({ viewBox }) => {
@@ -167,81 +148,59 @@ export function PiechartFraktionen({ persons }: PiechartFraktionenProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm ">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          <span className="text-red-500">{maxVisitorsParty.party}</span> -
-          Mehrheit mit {maxVisitorsParty.count}{" "}
-          <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground ">
-          Zeigt Abgeordnete einzelner Fraktionen
-        </div>
-        <div className="mt-4">
-          {/* Logos der Parteien */}
-          <div className="grid grid-cols-8 grid-rows-1 gap-4 content-stretch">
-            <div className="self-center">
-              <img src={Afd.src} width="120" height="120" alt="AfD" />
-            </div>
-            <div className="self-center">
-              <img src={Cdu.src} width="120" height="120" alt="CDU" />
-            </div>
-            <div className="self-center">
-              <img src={Fdp.src} width="120" height="120" alt="FDP" />
-            </div>
-            <div className="self-center">
-              <img src={Grüne.src} width="120" height="120" alt="Grüne" />
-            </div>
-            <div className="self-center ">
-              <img src={Linke.src} width="120" height="120" alt="Linke" />
-            </div>
-            <div className="self-center">
-              <img src={Spd.src} width="120" height="120" alt="SPD" />
-            </div>
-            <div className="self-center ">
-              <img src={BSW.src} width="120" height="120" alt="BSW" />
-            </div>
-            <div className="self-center">
-              <p className="font-bold text-2xl">Sonstige</p>
-            </div>
-          </div>
+      <CardFooter className="flex-col gap-2 text-sm pt-0 mt-0">
+  <div className="flex items-center gap-2 font-medium leading-none">
+    <span className="text-red-500">{maxVisitorsParty.party}</span> -
+    Mehrheit mit {maxVisitorsParty.count}{" "}
+    <TrendingUp className="h-4 w-4" />
+  </div>
+  <div className="leading-none text-muted-foreground ">
+    Zeigt Abgeordnete einzelner Fraktionen
+  </div> 
+  <div className="mt-4">
+    {/* Logos der Parteien */}
+    <div className="grid grid-cols-8 grid-rows-1 gap-4 content-stretch">
+    <div className="self-center ">
+        <img src={Linke.src} width="120" height="120" alt="Linke" />
+      </div>                         
+      <div className="self-center">
+        <img src={Afd.src} width="120" height="120" alt="AfD" />
+      </div>
+      <div className="self-center ">
+        <img src={BSW.src} width="120" height="120" alt="BSW" />
+      </div>
+      <div className="self-center">
+        <img src={Cdu.src} width="120" height="120" alt="CDU" />
+      </div>
+      <div className="self-center">
+        <img src={Grüne.src} width="120" height="120" alt="Grüne" />
+      </div>
+      <div className="self-center">
+        <p className="font-bold text-2xl">Fraktionslos</p>
+      </div>
+      <div className="self-center">
+        <img src={Spd.src} width="120" height="120" alt="SPD" />
+      </div>
+      <div className="self-center">
+        <img src={Fdp.src} width="120" height="120" alt="FDP" />
+      </div>
+   
+    </div>
 
-          {/* Farbe und Anzahl */}
-          <div className="grid grid-cols-8 grid-rows-1 gap-4">
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#00A3E0] mr-2"></div>
-              <span className="text-lg font-semibold">30</span>
-            </div>
-            <div className="flex justify-center mt-2 ">
-              <div className="w-6 h-6 rounded-full bg-[#000000] mr-2"></div>
-              <span className="text-lg font-semibold">25</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#FFCC00] mr-2"></div>
-              <span className="text-lg font-semibold">12</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#3F9C35] mr-2"></div>
-              <span className="text-lg font-semibold">20</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#C8102E] mr-2"></div>
-              <span className="text-lg font-semibold ">15</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#E3000F] mr-2"></div>
-              <span className="text-lg font-semibold">35</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#B4B4B4] mr-2"></div>
-              <span className="text-lg font-semibold">8</span>
-            </div>
-            <div className="flex justify-center mt-2">
-              <div className="w-6 h-6 rounded-full bg-[#D1D1D1] mr-2"></div>
-              <span className="text-lg font-semibold">5</span>
-            </div>
-          </div>
+    {/* Farbe und Anzahl */}
+    <div className="grid grid-cols-8 grid-rows-1 gap-4">
+      {chartData.map((entry, index) => (
+        <div key={entry.fraktion} className="flex justify-center mt-2">
+          <div
+            className="w-6 h-6 rounded-full mr-2"
+            style={{ backgroundColor: COLORS[entry.fraktion] }}
+          ></div>
+          <span className="text-lg font-semibold">{entry.count}</span>
         </div>
-      </CardFooter>
+      ))}
+    </div>
+  </div>
+</CardFooter>
     </Card>
   );
 }

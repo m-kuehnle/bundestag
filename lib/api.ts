@@ -29,7 +29,7 @@ const parseTitle = (title: string) => {
 const API_BASE_URL = "https://search.dip.bundestag.de/api/v1/person";
 const API_KEY = "I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21";
 const WAHLPERIODE = 20;
-const FETCH_DELAY_MS = 1000; // 1 second delay between API calls
+const FETCH_DELAY_MS = 500; // 1 second delay between API calls
 
 // Function to fetch persons with optional cursor
 async function fetchPersons(cursor?: string): Promise<AllPersons> {

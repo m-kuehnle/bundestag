@@ -34,7 +34,7 @@ const getFraktionData = (persons: Person[]) => {
   const fraktionCount: { [key: string]: number } = {};
 
   persons.forEach((person) => {
-    if (person.wahlperiode === 20 && person.position == "MdB") {
+    if (person.position == "MdB") {
       fraktionCount[person.association] =
         (fraktionCount[person.association] || 0) + 1;
     }

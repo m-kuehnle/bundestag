@@ -1,12 +1,19 @@
 import React from "react";
 import DashboardCard from "@/components/dashboard/DashboardCard";
-import { AllPersons, fetchAllPersons } from "../lib/api";
+import {
+  AllPersons,
+  fetchAllPersons,
+  Plenarprotokoll,
+  fetchPlenarprotokoll,
+} from "../lib/api";
 import PiechartFraktion from "@/components/dashboard/PiechartFraktionen";
 import Bundestagsmitglieder from "./bundestagsmitglieder/page";
+import PlenarprotokollText from "@/components/dashboard/PlenarprotokollText";
 
 export default async function Home() {
   const allPersons: AllPersons = await fetchAllPersons();
   const numPersons = allPersons.persons.length;
+  const plenarprotokoll: Plenarprotokoll = await fetchPlenarprotokoll();
 
   return (
     <div className="p-4">
@@ -22,6 +29,7 @@ export default async function Home() {
       </div>
       <PiechartFraktion persons={allPersons.persons}></PiechartFraktion>
       <Bundestagsmitglieder />
+      <PlenarprotokollText plenarprotokoll={plenarprotokoll} />
     </div>
   );
 }

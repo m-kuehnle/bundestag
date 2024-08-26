@@ -1,3 +1,9 @@
+// API Configuration
+const API_BASE_URL = "https://search.dip.bundestag.de/api/v1";
+const API_KEY = "I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21";
+const WAHLPERIODE = 20;
+const FETCH_DELAY_MS = 500; // 1 second delay between API calls
+
 // Define the Person type
 export type Person = {
   id: number;
@@ -14,6 +20,16 @@ export interface AllPersons {
   cursor?: string;
 }
 
+// Define the Plenarprotokoll interface
+export interface Plenarprotokoll {
+  numFound: number;
+  text: string;
+  cursor?: string;
+  pdf_url: string;
+  datum: string;
+  titel:string;
+}
+
 // Function to split the title into name, position, and association
 const parseTitle = (title: string) => {
   // Ignore commas inside parentheses
@@ -25,11 +41,10 @@ const parseTitle = (title: string) => {
   };
 };
 
-// API Configuration
-const API_BASE_URL = "https://search.dip.bundestag.de/api/v1/person";
-const API_KEY = "I9FKdCn.hbfefNWCY336dL6x62vfwNKpoN2RZ1gp21";
-const WAHLPERIODE = 20;
-const FETCH_DELAY_MS = 500; // 1 second delay between API calls
+// Utility function to introduce a delay
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 // Function to fetch persons with optional cursor
 async function fetchPersons(cursor?: string): Promise<AllPersons> {
@@ -47,7 +62,8 @@ async function fetchPersons(cursor?: string): Promise<AllPersons> {
     .map((key) => `${key}=${encodeURIComponent(params[key].toString())}`)
     .join("&");
 
-  const url = `${API_BASE_URL}?${queryString}`;
+  const url_person = API_BASE_URL + "/person";
+  const url = `${url_person}?${queryString}`;
 
   try {
     const res = await fetch(url, {
@@ -121,10 +137,53 @@ async function fetchAllPersons(): Promise<AllPersons> {
   };
 }
 
-// Utility function to introduce a delay
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+// Function to fetch plenary protocol
+async function fetchPlenarprotokoll(cursor?: string): Promise<Plenarprotokoll> {
+  const params: Record<string, string | number> = {
+    format: "json",
+    apikey: API_KEY,
+  };
+
+  const queryString = Object.keys(params)
+    .map((key) => `${key}=${encodeURIComponent(params[key].toString())}`)
+    .join("&");
+
+  const url_person = API_BASE_URL + "/plenarprotokoll-text";
+  const url = `${url_person}?${queryString}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch plenary protocoll data, status: ${res.status}`
+      );
+    }
+
+    const data = await res.json();
+
+    // Function to transform API response into Plenarprotokoll objects
+    const plenarprotokolle: Plenarprotokoll[] = (data.documents || []).map(
+      (doc: any) => {
+        return {
+          numFound: data.numFound, // Number of documents found
+          text: doc.text, // The full text field from the document
+          cursor: data.cursor, // The cursor for pagination
+          pdf_url: doc.fundstelle.pdf_url, // PDF URL from the fundstelle object
+          datum: doc.datum, // Date of the document
+          titel: doc.titel,
+        };
+      }
+    );
+    return plenarprotokolle[0];
+  } catch (error) {
+    console.error("Fetch plenar protocol error:", error);
+    throw error;
+  }
 }
 
-// Export functions
-export { fetchPersons, fetchAllPersons };
+export { fetchPersons, fetchAllPersons, fetchPlenarprotokoll };
